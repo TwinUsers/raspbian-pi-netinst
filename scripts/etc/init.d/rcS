@@ -40,10 +40,9 @@ drivers_to_load=
 online_config=
 usbroot=
 cmdline="dwc_otg.lpm_enable=0 console=ttyAMA0,115200 kgdboc=ttyAMA0,115200 console=tty1 elevator=deadline"
-rootfstype=ext4
+rootfstype=f2fs
 final_action=reboot
-hardware_versions=detect
-hwrng_support=1
+hwrng_support=0
 enable_watchdog=0
 enable_uart=0
 gpu_mem=
@@ -149,6 +148,13 @@ mdev -s
 
 klogd -c 1
 
+# remove unused drivers from ram disk
+for folder in /lib/modules/*; do
+    if [ "$(basename "${folder}")" != "$(uname -r)" ]; then
+        rm -r "${folder}"
+    fi
+done
+
 # set screen blank period to an hour unless consoleblank=0 on cmdline
 # hopefully the install should be done by then
 if grep -qv  "consoleblank=0" /proc/cmdline; then
@@ -225,7 +231,6 @@ echo "https://github.com/twinusers/raspbian-pi-netinst/"
 echo "================================================="
 
 echo -n "Starting HWRNG "
-modprobe bcm2835-rng
 /usr/sbin/rngd -r /dev/hwrng
 if [ $? -eq 0 ]; then
     echo "succeeded!"
@@ -653,7 +658,7 @@ if [ "$cdebootstrap_cmdline" = "" ]; then
       base_packages="$base_packages,rng-tools"
     fi
     # minimal
-    minimal_packages="fake-hwclock,ifupdown,net-tools,ntp,openssh-server,dosfstools,resolvconf"
+    minimal_packages="fake-hwclock,ifupdown,net-tools,ntp,openssh-server,dosfstools"
     if [ -n "$have_ip6" ] && [ "$ip6_nameservers" = "auto" ]; then
         minimal_packages="${minimal_packages},rdnssd"
     fi
@@ -1061,7 +1066,7 @@ if [ "$ip4_addr" = "disable" ]; then
     # to prefer IPv6 addresses (by performing AAAA lookups
     # before A lookups); since resolvconf is installed, this is
     # done by adding the proper line to the resolvconf 'head'
-    echo "options inet6" >> /etc/resolvconf/resolv.conf.d/head
+    echo "options inet6" >> /etc/resolv.conf
 fi
 
 if [ "$ip6_addr" = "disable" ]; then
@@ -1127,7 +1132,7 @@ fi
 
 # copy resolver configuration into rootfs, to be used for remainder of installation
 # will be overwritten by resolvconf when the system is rebooted
-cp /etc/resolv.conf /rootfs/run/resolvconf
+mv /etc/resolv.conf /rootfs/etc/resolv.conf
 
 # copy blacklist for rtl8192cu into rootfs; use original Realtek drivers instead
 cp /etc/modprobe.d/blacklist-native-rtl8192.conf /rootfs/etc/modprobe.d/
@@ -1277,7 +1282,7 @@ if [ "$kernel_module" = true ] ; then
 fi
 
 # check if we need the raspberrypi-kernel and add it if so
-if [ "$release" = "jessie" ]; then
+if [ "$release" = "wheezy" ]; then
     if [ -z "$packages" ]; then
         packages="raspberrypi-kernel"
     else
