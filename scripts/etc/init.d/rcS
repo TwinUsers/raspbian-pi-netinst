@@ -149,7 +149,7 @@ mdev -s
 klogd -c 1
 
 # remove unused drivers from ram disk
-for folder in rootfs/lib/modules/*; do
+for folder in /lib/modules/*; do
     if [ "$(basename "${folder}")" != "$(uname -r)" ]; then
         rm -r "${folder}"
     fi
