@@ -149,7 +149,7 @@ mdev -s
 klogd -c 1
 
 # remove unused drivers from ram disk
-for folder in /lib/modules/*; do
+for folder in rootfs/lib/modules/*; do
     if [ "$(basename "${folder}")" != "$(uname -r)" ]; then
         rm -r "${folder}"
     fi
@@ -231,6 +231,7 @@ echo "https://github.com/twinusers/raspbian-pi-netinst/"
 echo "================================================="
 
 echo -n "Starting HWRNG "
+modprobe bcm2835-rng
 /usr/sbin/rngd -r /dev/hwrng
 if [ $? -eq 0 ]; then
     echo "succeeded!"

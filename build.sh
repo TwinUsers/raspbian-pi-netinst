@@ -2,12 +2,12 @@
 
 set -e
 
-KERNEL_VERSION_RPI1=4.4.0-1-rpi
-KERNEL_VERSION_RPI2=4.4.0-1-rpi2
+KERNEL_VERSION_RPI1=4.9.0-3-rpi
+KERNEL_VERSION_RPI2=4.9.0-3-rpi2
 
 INSTALL_MODULES=("kernel/fs/btrfs/btrfs.ko")
 INSTALL_MODULES+=("kernel/drivers/scsi/sg.ko")
-#INSTALL_MODULES+=("kernel/drivers/char/hw_random/bcm2835-rng.ko")
+INSTALL_MODULES+=("kernel/drivers/char/hw_random/bcm2835-rng.ko")
 INSTALL_MODULES+=("kernel/net/ipv6/ipv6.ko")
 INSTALL_MODULES+=("kernel/net/wireless/cfg80211.ko")
 
@@ -364,7 +364,7 @@ if [ -d config ] ; then
     cp -r config/* bootfs/config
 fi
 
-ZIPFILE=raspbian-ua-netinst-`date +%Y%m%d`-git`git rev-parse --short @{0}`.zip
+ZIPFILE=raspbian-pi-netinst-`date +%Y%m%d`-git`git rev-parse --short @{0}`.zip
 rm -f $ZIPFILE
 
 cd bootfs && zip -r -9 ../$ZIPFILE *; cd ..
