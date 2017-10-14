@@ -21,7 +21,7 @@ cdebootstrap_cmdline=
 bootsize=+128M
 bootoffset=8192
 rootsize=
-swapwize=
+swap=
 timeserver=time.nist.gov
 timezone=Etc/UTC
 locales=
@@ -735,7 +735,7 @@ echo "  boot_volume_label = $boot_volume_label"
 echo "  bootsize = $bootsize"
 echo "  bootoffset = $bootoffset"
 echo "  rootsize = $rootsize"
-echo "  swapsize = $swapsize"
+echo "  swap = $swap"
 echo "  timeserver = $timeserver"
 echo "  timezone = $timezone"
 echo "  locales = $locales"
@@ -1360,15 +1360,10 @@ sync # synchronize before saving time to make it "more accurate"
 date +"%Y-%m-%d %H:%M:%S" > /rootfs/etc/fake-hwclock.data
 
 echo -n "Setting up swap..."
-if [ -n "${swapsize}" ] ; then
-    chroot /rootfs /bin/dd if=/dev/zero of=/swap bs=$swapsize count=1 >/dev/null 2>&1 || fail
+if [ "${swap}" = "1" ]; then
+    chroot /rootfs /bin/dd if=/dev/zero of=/swap bs=128M count=1 >/dev/null 2>&1 || fail
     chroot /rootfs /sbin/mkswap /swap || fail
     chroot /rootfs /bin/chmod 600 /swap || fail
-    echo "/swap none swap sw 0 0" >> /rootfs/etc/fstab || fail
-else
-    chroot /rootfs /bin/dd if=/dev/zero of=/swap bs=64M count=1 >/dev/null 2>&1 || fail
-    chroot /rootfs /sbin/mkswap /swap >/dev/null 2>&1 || fail
-    chroot /rootfs /bin/chmod 600 /swap >/dev/null 2>&1 || fail
     echo "/swap none swap sw 0 0" >> /rootfs/etc/fstab || fail
 fi
 echo "OK"
