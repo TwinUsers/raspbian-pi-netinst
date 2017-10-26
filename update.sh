@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-KERNEL_VERSION_RPI1=4.9.0-3-rpi
-KERNEL_VERSION_RPI2=4.9.0-3-rpi2
+KERNEL_VERSION_RPI1=4.9.0-4-rpi
+KERNEL_VERSION_RPI2=4.9.0-4-rpi2
 
 RASPBIAN_ARCHIVE_KEY_DIRECTORY="https://archive.raspbian.org"
 RASPBIAN_ARCHIVE_KEY_FILE_NAME="raspbian.public.key"
@@ -27,27 +27,55 @@ packages+=("linux-image-${KERNEL_VERSION_RPI1}")
 packages+=("linux-image-${KERNEL_VERSION_RPI2}")
 packages+=("firmware-brcm80211")
 packages+=("btrfs-tools")
-packages+=("busybox-static")
+packages+=("busybox")
 packages+=("cdebootstrap-static")
 packages+=("dosfstools")
+packages+=("dpkg")
 packages+=("e2fslibs")
 packages+=("e2fsprogs")
 packages+=("f2fs-tools")
 packages+=("gpgv")
+packages+=("ifupdown")
+packages+=("iproute2")
+packages+=("lsb-base")
+packages+=("netbase")
 packages+=("ntpdate")
 packages+=("raspbian-archive-keyring")
+packages+=("rng-tools")
+packages+=("tar")
+packages+=("util-linux")
 packages+=("wpasupplicant")
 packages+=("ndisc6")
-packages+=("rng-tools")
 
 # libraries
+packages+=("libacl1")
+packages+=("libatm1")
+packages+=("libattr1")
+packages+=("libaudit-common")
+packages+=("libaudit1")
 packages+=("libblkid1")
 packages+=("libbz2-1.0")
+packages+=("libc-bin")
 packages+=("libc6")
-packages+=("libssl1.0.0")
+packages+=("libcap2")
 packages+=("libcomerr2")
+packages+=("libdb5.3")
+packages+=("libdbus-1-3")
 packages+=("libgcc1")
+packages+=("liblzma5")
 packages+=("liblzo2-2")
+packages+=("libmount1")
+packages+=("libncurses5")
+packages+=("libnl-3-200")
+packages+=("libnl-genl-3-200")
+packages+=("libpam0g")
+packages+=("libpcre3")
+packages+=("libpcsclite1")
+packages+=("libselinux1")
+packages+=("libslang2")
+packages+=("libsmartcols1")
+packages+=("libssl1.0.0")
+packages+=("libtinfo5")
 packages+=("libuuid1")
 packages+=("zlib1g")
 
